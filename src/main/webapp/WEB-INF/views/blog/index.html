@@ -17,6 +17,34 @@
             let blog = {};
             let dynamicUrl = "";
             let methodName = "";
+
+            $('#search').click(function () {
+                $.ajax({
+                    url: "http://localhost:8080/api/blog/search?p=" + $('#searchBox').val().trim(),
+                    method: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        let tableContainer = $('#tableContainer');
+                        tableContainer.empty();
+                        $(data).each(function (index, element) {
+                            tableContainer.append(
+                                '<table class="table border border-dark ms-4" style="width: 500px">' +
+                                '<tr> <td colSpan="2"> <h4 style="margin: 0"></h4>' + element.title + '</td> </tr>' +
+                                '<tr> <td colSpan="2"> <h5 style="margin: 0"></h5>' + element.author + ' </td> </tr>' +
+                                '<tr> <td colSpan="2"> <p style="margin: 0">' + element.category.name + '</p> </td></tr>' +
+                                '<tr><td colSpan="2"><p>' + element.content + '</p></td></tr>' +
+                                '<tr><td>Created</td><td>' + element.date + '</td></tr>' +
+                                '<tr><td colSpan = "2"><div class = "d-flex justify-content-around">' +
+                                '<a th:href = "@{/edit/__${row.id}__}" class = "btn btn-success" > Edit </a>' +
+                                '<a th:href="@{/delete/__${row.id}__}" class="btn btn-danger">Delete</a></div></td></tr></table>'
+                            )
+                        })
+                    },
+                    error: function (error) {
+                        alert(error.message);
+                    }
+                });
+            });
         });
     </script>
 
@@ -41,40 +69,43 @@
 <div style="display: grid; grid-template-columns: 70% auto">
     <div>
         <h3 class="m-4">List blog</h3>
-        <table th:each="row : ${blogList}" class="table border border-dark ms-4" style="width: 500px">
-            <tr>
-                <td colspan="2">
-                    <h4 th:text="${row.title}" style="margin: 0"></h4>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <h5 th:text="${row.author}" style="margin: 0"></h5>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <p th:text="${row.category.name}" style="margin: 0"></p>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <p th:text="${row.content}"></p>
-                </td>
-            </tr>
-            <tr>
-                <td>Created</td>
-                <td th:text="${row.date}"></td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="d-flex justify-content-around">
-                        <a th:href="@{/edit/__${row.id}__}" class="btn btn-success">Edit</a>
-                        <a th:href="@{/delete/__${row.id}__}" class="btn btn-danger">Delete</a>
-                    </div>
-                </td>
-            </tr>
-        </table>
+        <div id="tableContainer">
+            <table th:each="row : ${blogList}" class="table border border-dark ms-4" style="width: 500px">
+                <tr>
+                    <td colspan="2">
+                        <h4 th:text="${row.title}" style="margin: 0"></h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <h5 th:text="${row.author}" style="margin: 0"></h5>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p th:text="${row.category.name}" style="margin: 0"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p th:text="${row.content}"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Created</td>
+                    <td th:text="${row.date}"></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="d-flex justify-content-around">
+                            <a th:href="@{/edit/__${row.id}__}" class="btn btn-success">Edit</a>
+                            <a th:href="@{/delete/__${row.id}__}" class="btn btn-danger">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
     </div>
 
     <div>

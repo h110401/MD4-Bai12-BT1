@@ -15,7 +15,6 @@ public interface IBlogRepository extends PagingAndSortingRepository<Blog, Long> 
 
     Iterable<Blog> findAllByCategory(Category category);
 
-    @Query(value = "select b from Blog b where b.title like concat('%s',:title,'%s')")
     Iterable<Blog> findAllByTitleContaining(@Param("title") String title);
 
 }
